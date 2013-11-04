@@ -199,6 +199,13 @@ static int __init dmi_disable_osi_win8(const struct dmi_system_id *d)
 	return 0;
 }
 
+static int __init dmi_disable_osi_win8(const struct dmi_system_id *d)
+{
+	printk(KERN_NOTICE PREFIX "DMI detected: %s\n", d->ident);
+	acpi_osi_setup("!Windows 2012");
+	return 0;
+}
+
 static struct dmi_system_id acpi_osi_dmi_table[] __initdata = {
 	{
 	.callback = dmi_disable_osi_vista,
@@ -295,6 +302,37 @@ static struct dmi_system_id acpi_osi_dmi_table[] __initdata = {
 	.matches = {
 		     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
 		     DMI_MATCH(DMI_PRODUCT_VERSION, "3259A2G"),
+		},
+	},
+
+	/*
+	 * The following Lenovo models have a broken workaround in the
+	 * acpi_video backlight implementation to meet the Windows 8
+	 * requirement of 101 backlight levels. Reverting to pre-Win8
+	 * behavoir fixes the problem.
+	 */
+	{
+	.callback = dmi_disable_osi_win8,
+	.ident = "Lenovo ThinkPad T430",
+	.matches = {
+		     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+		     DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T430"),
+		},
+	},
+	{
+	.callback = dmi_disable_osi_win8,
+	.ident = "Lenovo ThinkPad T430s",
+	.matches = {
+		     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+		     DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T430s"),
+		},
+	},
+	{
+	.callback = dmi_disable_osi_win8,
+	.ident = "Lenovo ThinkPad X230",
+	.matches = {
+		     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+		     DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad X230"),
 		},
 	},
 
