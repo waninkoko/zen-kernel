@@ -16,13 +16,33 @@
 #include <linux/percpu-defs.h>
 #include <linux/slab.h>
 #include <linux/tick.h>
+#include <linux/types.h>
+#include <linux/cpu.h>
+#include <linux/zentune.h>
+
 #include "cpufreq_governor.h"
 
 /* On-demand governor macros */
-#define DEF_FREQUENCY_UP_THRESHOLD		(80)
-#define DEF_SAMPLING_DOWN_FACTOR		(1)
+#if defined(CONFIG_ZEN_CUSTOM)
+#  define DEF_FREQUENCY_UP_THRESHOLD		(DEF_FREQUENCY_UP_THRESHOLD_CUSTOM)
+#elif defined(CONFIG_ZEN_DEFAULT)
+#  define DEF_FREQUENCY_UP_THRESHOLD		(80)
+#endif
+
+#if defined(CONFIG_ZEN_CUSTOM)
+#  define DEF_SAMPLING_DOWN_FACTOR	(DEF_SAMPLING_DOWN_FACTOR_CUSTOM)
+#elif defined (CONFIG_ZEN_DEFAULT)
+#  define DEF_SAMPLING_DOWN_FACTOR	(1)
+#endif
+
 #define MAX_SAMPLING_DOWN_FACTOR		(100000)
-#define MICRO_FREQUENCY_UP_THRESHOLD		(95)
+
+#if   defined(CONFIG_ZEN_CUSTOM)
+#  define MICRO_FREQUENCY_UP_THRESHOLD		(MICRO_FREQUENCY_UP_THRESHOLD_CUSTOM)
+#elif defined(CONFIG_ZEN_DEFAULT)
+#  define MICRO_FREQUENCY_UP_THRESHOLD		(95)
+#endif
+
 #define MICRO_FREQUENCY_MIN_SAMPLE_RATE		(10000)
 #define MIN_FREQUENCY_UP_THRESHOLD		(11)
 #define MAX_FREQUENCY_UP_THRESHOLD		(100)

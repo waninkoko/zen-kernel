@@ -38,6 +38,7 @@
 #include <linux/sched/rt.h>
 #include <linux/mm_inline.h>
 #include <trace/events/writeback.h>
+#include <linux/zentune.h>
 
 #include "internal.h"
 
@@ -70,7 +71,11 @@ static long ratelimit_pages = 32;
 /*
  * Start background writeback (via writeback threads) at this percentage
  */
+#if defined(CONFIG_ZEN_DEFAULT)
 int dirty_background_ratio = 10;
+#elif defined(CONFIG_ZEN_CUSTOM)
+int dirty_background_ratio = dirty_background_ratio_custom;
+#endif
 
 /*
  * dirty_background_bytes starts at 0 (disabled) so that it is a function of
@@ -87,7 +92,11 @@ int vm_highmem_is_dirtyable;
 /*
  * The generator of dirty data starts writeback at this percentage
  */
+#if defined(CONFIG_ZEN_DEFAULT)
 int vm_dirty_ratio = 20;
+#elif defined(CONFIG_ZEN_CUSTOM)
+int vm_dirty_ratio = vm_dirty_ratio_custom;
+#endif
 
 /*
  * vm_dirty_bytes starts at 0 (disabled) so that it is a function of
