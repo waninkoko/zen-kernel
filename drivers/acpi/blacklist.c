@@ -199,13 +199,6 @@ static int __init dmi_disable_osi_win8(const struct dmi_system_id *d)
 	return 0;
 }
 
-static int __init dmi_disable_osi_win8(const struct dmi_system_id *d)
-{
-	printk(KERN_NOTICE PREFIX "DMI detected: %s\n", d->ident);
-	acpi_osi_setup("!Windows 2012");
-	return 0;
-}
-
 static struct dmi_system_id acpi_osi_dmi_table[] __initdata = {
 	{
 	.callback = dmi_disable_osi_vista,
